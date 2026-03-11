@@ -4,10 +4,8 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/components/auth-provider";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Shield } from "lucide-react";
 
 export default function RegisterPage() {
@@ -40,34 +38,34 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-b from-white to-indigo-50/50">
-      <Card className="w-full max-w-md animate-scale-in">
-        <CardHeader className="text-center">
-          <div className="mx-auto mb-4 h-12 w-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+    <div className="min-h-screen flex items-center justify-center px-4">
+      <div className="w-full max-w-md glass-card p-8 animate-scale-in">
+        <div className="text-center mb-6">
+          <div className="mx-auto mb-4 h-12 w-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
             <Shield className="h-6 w-6 text-white" />
           </div>
-          <CardTitle className="text-2xl">Create account</CardTitle>
-          <CardDescription>Get started with SubSentry for free</CardDescription>
-        </CardHeader>
-        <CardContent>
+          <h2 className="text-2xl font-bold text-white">Create account</h2>
+          <p className="text-slate-400 text-sm mt-1">Get started with SubSentry for free</p>
+        </div>
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
-              <div className="rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-600 animate-slide-down">
+              <div className="rounded-lg bg-red-500/10 border border-red-500/20 px-4 py-3 text-sm text-red-400 animate-slide-down">
                 {error}
               </div>
             )}
             <div className="space-y-2">
-              <Label htmlFor="name">Full Name</Label>
+              <Label htmlFor="name" className="text-slate-300">Full Name</Label>
               <Input
                 id="name"
                 placeholder="John Doe"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
+                className="bg-white/[0.06] border-white/10 text-white placeholder:text-slate-500 focus:border-indigo-500/50"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email" className="text-slate-300">Email</Label>
               <Input
                 id="email"
                 type="email"
@@ -75,10 +73,11 @@ export default function RegisterPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                className="bg-white/[0.06] border-white/10 text-white placeholder:text-slate-500 focus:border-indigo-500/50"
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password" className="text-slate-300">Password</Label>
               <Input
                 id="password"
                 type="password"
@@ -87,21 +86,21 @@ export default function RegisterPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 minLength={6}
+                className="bg-white/[0.06] border-white/10 text-white placeholder:text-slate-500 focus:border-indigo-500/50"
               />
-              <p className="text-xs text-muted-foreground">Minimum 6 characters</p>
+              <p className="text-xs text-slate-500">Minimum 6 characters</p>
             </div>
-            <Button type="submit" className="w-full" disabled={loading}>
+            <button type="submit" className="neon-btn w-full text-center cursor-pointer" disabled={loading}>
               {loading ? "Creating account..." : "Create Account"}
-            </Button>
+            </button>
           </form>
-          <p className="mt-4 text-center text-sm text-muted-foreground">
+          <p className="mt-4 text-center text-sm text-slate-500">
             Already have an account?{" "}
-            <Link href="/login" className="text-primary font-medium hover:underline">
+            <Link href="/login" className="text-indigo-400 font-medium hover:underline">
               Sign in
             </Link>
           </p>
-        </CardContent>
-      </Card>
+      </div>
     </div>
   );
 }

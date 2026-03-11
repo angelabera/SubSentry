@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   PieChart,
   Pie,
@@ -17,7 +16,7 @@ import {
 } from "recharts";
 import { formatCurrency } from "@/lib/utils";
 
-const COLORS = ["#6366f1", "#22c55e", "#f59e0b", "#8b5cf6", "#ec4899", "#64748b"];
+const COLORS = ["#818cf8", "#34d399", "#fbbf24", "#a78bfa", "#f472b6", "#94a3b8"];
 
 interface Subscription {
   price: number;
@@ -46,25 +45,20 @@ export function SpendingByCategory({ subscriptions }: SpendingChartsProps) {
 
   if (categoryData.length === 0) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Spending by Category</CardTitle>
-        </CardHeader>
-        <CardContent className="flex items-center justify-center h-[300px] text-muted-foreground">
+      <div className="glass-card glow-violet p-6">
+        <h3 className="font-semibold text-white mb-4">Spending by Category</h3>
+        <div className="flex items-center justify-center h-[300px] text-slate-500">
           No data available
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     );
   }
 
   const total = categoryData.reduce((sum, d) => sum + d.value, 0);
 
   return (
-    <Card className="animate-slide-up" style={{ animationDelay: "200ms", animationFillMode: "both" }}>
-      <CardHeader>
-        <CardTitle className="text-base">Spending by Category</CardTitle>
-      </CardHeader>
-      <CardContent>
+    <div className="glass-card glow-violet p-6 animate-slide-up" style={{ animationDelay: "200ms", animationFillMode: "both" }}>
+      <h3 className="font-semibold text-white mb-4">Spending by Category</h3>
         <ResponsiveContainer width="100%" height={300}>
           <PieChart>
             <Pie
@@ -75,6 +69,7 @@ export function SpendingByCategory({ subscriptions }: SpendingChartsProps) {
               outerRadius={100}
               paddingAngle={4}
               dataKey="value"
+              stroke="transparent"
             >
               {categoryData.map((_, index) => (
                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -84,11 +79,13 @@ export function SpendingByCategory({ subscriptions }: SpendingChartsProps) {
               formatter={(value) => formatCurrency(Number(value))}
               contentStyle={{
                 borderRadius: "0.75rem",
-                border: "1px solid hsl(240, 5.9%, 90%)",
-                boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+                background: "rgba(15, 23, 55, 0.95)",
+                border: "1px solid rgba(99, 102, 241, 0.2)",
+                color: "#e2e8f0",
+                boxShadow: "0 4px 20px rgba(0, 0, 0, 0.3)",
               }}
             />
-            <Legend />
+            <Legend wrapperStyle={{ color: "#94a3b8", fontSize: "13px" }} />
           </PieChart>
         </ResponsiveContainer>
         <div className="mt-4 space-y-2">
@@ -101,17 +98,16 @@ export function SpendingByCategory({ subscriptions }: SpendingChartsProps) {
                     className="h-3 w-3 rounded-full"
                     style={{ backgroundColor: COLORS[i % COLORS.length] }}
                   />
-                  <span>{cat.name}</span>
+                  <span className="text-slate-400">{cat.name}</span>
                 </div>
-                <span className="font-medium">
+                <span className="font-medium text-slate-200">
                   {formatCurrency(cat.value)}/mo ({percentage}%)
                 </span>
               </div>
             );
           })}
         </div>
-      </CardContent>
-    </Card>
+    </div>
   );
 }
 
@@ -126,35 +122,30 @@ export function MonthlyCostBar({ subscriptions }: SpendingChartsProps) {
 
   if (barData.length === 0) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Monthly Subscription Cost</CardTitle>
-        </CardHeader>
-        <CardContent className="flex items-center justify-center h-[300px] text-muted-foreground">
+      <div className="glass-card glow-indigo p-6">
+        <h3 className="font-semibold text-white mb-4">Monthly Subscription Cost</h3>
+        <div className="flex items-center justify-center h-[300px] text-slate-500">
           No data available
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     );
   }
 
   return (
-    <Card className="animate-slide-up" style={{ animationDelay: "300ms", animationFillMode: "both" }}>
-      <CardHeader>
-        <CardTitle className="text-base">Monthly Subscription Cost</CardTitle>
-      </CardHeader>
-      <CardContent>
+    <div className="glass-card glow-indigo p-6 animate-slide-up" style={{ animationDelay: "300ms", animationFillMode: "both" }}>
+      <h3 className="font-semibold text-white mb-4">Monthly Subscription Cost</h3>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={barData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="hsl(240, 5.9%, 90%)" />
+            <CartesianGrid strokeDasharray="3 3" stroke="rgba(99, 102, 241, 0.1)" />
             <XAxis
               dataKey="name"
-              tick={{ fontSize: 12 }}
+              tick={{ fontSize: 12, fill: "#94a3b8" }}
               tickLine={false}
               axisLine={false}
             />
             <YAxis
               tickFormatter={(v) => `₹${v}`}
-              tick={{ fontSize: 12 }}
+              tick={{ fontSize: 12, fill: "#94a3b8" }}
               tickLine={false}
               axisLine={false}
             />
@@ -162,19 +153,20 @@ export function MonthlyCostBar({ subscriptions }: SpendingChartsProps) {
               formatter={(value) => formatCurrency(Number(value))}
               contentStyle={{
                 borderRadius: "0.75rem",
-                border: "1px solid hsl(240, 5.9%, 90%)",
-                boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+                background: "rgba(15, 23, 55, 0.95)",
+                border: "1px solid rgba(99, 102, 241, 0.2)",
+                color: "#e2e8f0",
+                boxShadow: "0 4px 20px rgba(0, 0, 0, 0.3)",
               }}
             />
             <Bar
               dataKey="monthly"
-              fill="#6366f1"
+              fill="#818cf8"
               radius={[6, 6, 0, 0]}
               name="Monthly Cost"
             />
           </BarChart>
         </ResponsiveContainer>
-      </CardContent>
-    </Card>
+    </div>
   );
 }

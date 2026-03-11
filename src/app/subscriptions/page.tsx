@@ -5,8 +5,6 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/components/auth-provider";
 import { SubscriptionTable, SubscriptionData } from "@/components/subscription/subscription-table";
 import { SubscriptionForm } from "@/components/subscription/subscription-form";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Search } from "lucide-react";
 
@@ -72,7 +70,7 @@ export default function SubscriptionsPage() {
   if (authLoading || loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500" />
       </div>
     );
   }
@@ -87,39 +85,37 @@ export default function SubscriptionsPage() {
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-2xl font-bold">Subscriptions</h1>
-          <p className="text-muted-foreground text-sm mt-1">
+          <h1 className="text-2xl font-bold text-white">Subscriptions</h1>
+          <p className="text-slate-400 text-sm mt-1">
             Manage all your subscriptions in one place.
           </p>
         </div>
-        <Button onClick={() => setFormOpen(true)} className="gap-2">
+        <button onClick={() => setFormOpen(true)} className="neon-btn flex items-center justify-center gap-2 text-sm cursor-pointer">
           <Plus className="h-4 w-4" /> Add Subscription
-        </Button>
+        </button>
       </div>
 
-      <Card className="animate-fade-in">
-        <CardHeader className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <CardTitle className="text-base">
+      <div className="glass-card p-6 animate-fade-in">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+          <h3 className="font-semibold text-white text-base">
             All Subscriptions ({subscriptions.length})
-          </CardTitle>
+          </h3>
           <div className="relative w-full sm:w-64">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
             <Input
               placeholder="Search subscriptions..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-9"
+              className="pl-9 bg-white/[0.06] border-white/10 text-white placeholder:text-slate-500 focus:border-indigo-500/50"
             />
           </div>
-        </CardHeader>
-        <CardContent>
-          <SubscriptionTable
-            subscriptions={filtered}
-            onEdit={(sub) => setEditingSub(sub)}
-            onDelete={handleDelete}
-          />
-        </CardContent>
-      </Card>
+        </div>
+        <SubscriptionTable
+          subscriptions={filtered}
+          onEdit={(sub) => setEditingSub(sub)}
+          onDelete={handleDelete}
+        />
+      </div>
 
       <SubscriptionForm
         open={formOpen}

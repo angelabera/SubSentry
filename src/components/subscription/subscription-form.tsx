@@ -102,8 +102,8 @@ export function SubscriptionForm({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>{isEditing ? "Edit Subscription" : "Add Subscription"}</DialogTitle>
-          <DialogDescription>
+          <DialogTitle className="text-white">{isEditing ? "Edit Subscription" : "Add Subscription"}</DialogTitle>
+          <DialogDescription className="text-slate-400">
             {isEditing
               ? "Update your subscription details."
               : "Add a new subscription to track."}
@@ -112,11 +112,12 @@ export function SubscriptionForm({
 
         <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="service_name">Service Name</Label>
+            <Label htmlFor="service_name" className="text-slate-300">Service Name</Label>
             <Input
               id="service_name"
               placeholder="e.g., Netflix, Spotify"
               {...register("service_name")}
+              className="bg-white/[0.06] border-white/10 text-white placeholder:text-slate-500"
             />
             {errors.service_name && (
               <p className="text-xs text-red-500">{errors.service_name.message}</p>
@@ -125,13 +126,14 @@ export function SubscriptionForm({
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="price">Price (₹)</Label>
+              <Label htmlFor="price" className="text-slate-300">Price (₹)</Label>
               <Input
                 id="price"
                 type="number"
                 step="0.01"
                 placeholder="9.99"
                 {...register("price", { valueAsNumber: true })}
+                className="bg-white/[0.06] border-white/10 text-white placeholder:text-slate-500"
               />
               {errors.price && (
                 <p className="text-xs text-red-500">{errors.price.message}</p>
@@ -145,10 +147,10 @@ export function SubscriptionForm({
                 name="billing_cycle"
                 render={({ field }) => (
                   <Select onValueChange={field.onChange} value={field.value}>
-                    <SelectTrigger>
+                    <SelectTrigger className="bg-white/[0.06] border-white/10 text-white">
                       <SelectValue placeholder="Select cycle" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-[#111827] border-white/10 text-slate-200">
                       <SelectItem value="monthly">Monthly</SelectItem>
                       <SelectItem value="yearly">Yearly</SelectItem>
                     </SelectContent>
@@ -160,11 +162,12 @@ export function SubscriptionForm({
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="renewal_date">Renewal Date</Label>
+              <Label htmlFor="renewal_date" className="text-slate-300">Renewal Date</Label>
               <Input
                 id="renewal_date"
                 type="date"
                 {...register("renewal_date")}
+                className="bg-white/[0.06] border-white/10 text-white [color-scheme:dark]"
               />
               {errors.renewal_date && (
                 <p className="text-xs text-red-500">{errors.renewal_date.message}</p>
@@ -178,10 +181,10 @@ export function SubscriptionForm({
                 name="category"
                 render={({ field }) => (
                   <Select onValueChange={field.onChange} value={field.value}>
-                    <SelectTrigger>
+                    <SelectTrigger className="bg-white/[0.06] border-white/10 text-white">
                       <SelectValue placeholder="Select category" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-[#111827] border-white/10 text-slate-200">
                       {CATEGORIES.map((cat) => (
                         <SelectItem key={cat} value={cat}>
                           {cat}
@@ -198,11 +201,12 @@ export function SubscriptionForm({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="notes">Notes (optional)</Label>
+            <Label htmlFor="notes" className="text-slate-300">Notes (optional)</Label>
             <Textarea
               id="notes"
               placeholder="Any additional notes..."
               {...register("notes")}
+              className="bg-white/[0.06] border-white/10 text-white placeholder:text-slate-500"
             />
           </div>
 
@@ -211,16 +215,17 @@ export function SubscriptionForm({
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
+              className="border-white/10 text-slate-300 hover:bg-white/[0.06] hover:text-white"
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={isSubmitting}>
+            <button type="submit" className="neon-btn text-sm cursor-pointer" disabled={isSubmitting}>
               {isSubmitting
                 ? "Saving..."
                 : isEditing
                 ? "Update Subscription"
                 : "Save Subscription"}
-            </Button>
+            </button>
           </div>
         </form>
       </DialogContent>

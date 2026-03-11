@@ -74,13 +74,13 @@ export function Navbar() {
   if (!user) return null;
 
   return (
-    <nav className="sticky top-0 z-40 w-full border-b bg-white/80 backdrop-blur-md">
+    <nav className="sticky top-0 z-40 w-full border-b border-white/[0.06] bg-[#0a0f1e]/80 backdrop-blur-xl">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link href="/dashboard" className="flex items-center gap-2 group">
-            <Shield className="h-7 w-7 text-primary transition-transform group-hover:scale-110" />
-            <span className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+            <Shield className="h-7 w-7 text-indigo-400 transition-transform group-hover:scale-110" />
+            <span className="text-xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
               SubSentry
             </span>
           </Link>
@@ -94,8 +94,8 @@ export function Navbar() {
                 className={cn(
                   "flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200",
                   pathname === item.href
-                    ? "bg-primary/10 text-primary"
-                    : "text-muted-foreground hover:text-foreground hover:bg-accent"
+                    ? "bg-indigo-500/15 text-indigo-300"
+                    : "text-slate-400 hover:text-slate-200 hover:bg-white/[0.06]"
                 )}
               >
                 <item.icon className="h-4 w-4" />
@@ -109,7 +109,7 @@ export function Navbar() {
             {/* Notifications */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="relative">
+                <Button variant="ghost" size="icon" className="relative text-slate-400 hover:text-white hover:bg-white/[0.06]">
                   <Bell className="h-5 w-5" />
                   {unreadCount > 0 && (
                     <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-red-500 text-[10px] font-bold text-white flex items-center justify-center animate-scale-in">
@@ -118,21 +118,21 @@ export function Navbar() {
                   )}
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-80">
+              <DropdownMenuContent align="end" className="w-80 bg-[#111827] border-white/10">
                 <div className="flex items-center justify-between px-3 py-2">
-                  <p className="text-sm font-semibold">Notifications</p>
+                  <p className="text-sm font-semibold text-slate-200">Notifications</p>
                   {unreadCount > 0 && (
                     <button
                       onClick={markAllRead}
-                      className="text-xs text-primary hover:underline cursor-pointer"
+                      className="text-xs text-indigo-400 hover:underline cursor-pointer"
                     >
                       Mark all read
                     </button>
                   )}
                 </div>
-                <DropdownMenuSeparator />
+                <DropdownMenuSeparator className="bg-white/10" />
                 {notifications.length === 0 ? (
-                  <div className="px-3 py-6 text-center text-sm text-muted-foreground">
+                  <div className="px-3 py-6 text-center text-sm text-slate-500">
                     No notifications yet
                   </div>
                 ) : (
@@ -141,12 +141,12 @@ export function Navbar() {
                       <div
                         key={n._id}
                         className={cn(
-                          "px-3 py-2.5 text-sm border-b last:border-0 transition-colors",
-                          !n.read_status && "bg-primary/5 font-medium"
+                          "px-3 py-2.5 text-sm border-b border-white/5 last:border-0 transition-colors text-slate-300",
+                          !n.read_status && "bg-indigo-500/10 font-medium"
                         )}
                       >
                         <p>{n.message}</p>
-                        <p className="text-xs text-muted-foreground mt-1">
+                        <p className="text-xs text-slate-500 mt-1">
                           {new Date(n.created_at).toLocaleDateString()}
                         </p>
                       </div>
@@ -159,24 +159,24 @@ export function Navbar() {
             {/* User Menu */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-full">
-                  <div className="h-8 w-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-sm font-bold">
+                <Button variant="ghost" size="icon" className="rounded-full hover:bg-white/[0.06]">
+                  <div className="h-8 w-8 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-sm font-bold shadow-lg shadow-indigo-500/20">
                     {user.name?.charAt(0).toUpperCase()}
                   </div>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuContent align="end" className="w-56 bg-[#111827] border-white/10">
                 <div className="px-3 py-2">
-                  <p className="text-sm font-medium">{user.name}</p>
-                  <p className="text-xs text-muted-foreground">{user.email}</p>
+                  <p className="text-sm font-medium text-slate-200">{user.name}</p>
+                  <p className="text-xs text-slate-500">{user.email}</p>
                 </div>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuSeparator className="bg-white/10" />
+                <DropdownMenuItem className="text-slate-300 focus:bg-white/[0.06] focus:text-white">
                   <User className="mr-2 h-4 w-4" />
                   Profile
                 </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={logout} className="text-red-600">
+                <DropdownMenuSeparator className="bg-white/10" />
+                <DropdownMenuItem onClick={logout} className="text-red-400 focus:bg-red-500/10 focus:text-red-400">
                   <LogOut className="mr-2 h-4 w-4" />
                   Logout
                 </DropdownMenuItem>
@@ -187,7 +187,7 @@ export function Navbar() {
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden"
+              className="md:hidden text-slate-400 hover:text-white hover:bg-white/[0.06]"
               onClick={() => setMobileOpen(!mobileOpen)}
             >
               {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -206,8 +206,8 @@ export function Navbar() {
                 className={cn(
                   "flex items-center gap-2 px-4 py-3 rounded-lg text-sm font-medium transition-all",
                   pathname === item.href
-                    ? "bg-primary/10 text-primary"
-                    : "text-muted-foreground hover:bg-accent"
+                    ? "bg-indigo-500/15 text-indigo-300"
+                    : "text-slate-400 hover:bg-white/[0.06]"
                 )}
               >
                 <item.icon className="h-4 w-4" />

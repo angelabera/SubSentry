@@ -8,8 +8,6 @@ import { UpcomingRenewals } from "@/components/dashboard/upcoming-renewals";
 import { SpendingByCategory } from "@/components/charts/spending-charts";
 import { SubscriptionTable, SubscriptionData } from "@/components/subscription/subscription-table";
 import { SubscriptionForm } from "@/components/subscription/subscription-form";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Plus, TrendingUp } from "lucide-react";
 import { getDaysRemaining, formatCurrency } from "@/lib/utils";
 
@@ -78,7 +76,7 @@ export default function DashboardPage() {
   if (authLoading || loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500" />
       </div>
     );
   }
@@ -111,14 +109,14 @@ export default function DashboardPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-2xl font-bold">Dashboard</h1>
-          <p className="text-muted-foreground text-sm mt-1">
-            Welcome back, {user?.name}! Here&apos;s your subscription overview.
+          <h1 className="text-2xl font-bold text-white">Dashboard</h1>
+          <p className="text-slate-400 text-sm mt-1">
+            Welcome back, <span className="text-indigo-300 font-medium">{user?.name}</span>! Here&apos;s your subscription overview.
           </p>
         </div>
-        <Button onClick={() => setFormOpen(true)} className="gap-2">
+        <button onClick={() => setFormOpen(true)} className="neon-btn flex items-center justify-center gap-2 text-sm cursor-pointer">
           <Plus className="h-4 w-4" /> Add Subscription
-        </Button>
+        </button>
       </div>
 
       {/* Stats Cards */}
@@ -133,18 +131,14 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
         {/* Left - Table */}
         <div className="lg:col-span-2">
-          <Card className="animate-slide-up" style={{ animationDelay: "300ms", animationFillMode: "both" }}>
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="text-base">Recent Subscriptions</CardTitle>
-            </CardHeader>
-            <CardContent>
+          <div className="glass-card glow-indigo p-6 animate-slide-up" style={{ animationDelay: "300ms", animationFillMode: "both" }}>
+            <h3 className="font-semibold text-white mb-4">Recent Subscriptions</h3>
               <SubscriptionTable
                 subscriptions={subscriptions.slice(0, 5)}
                 onEdit={openEdit}
                 onDelete={handleDelete}
               />
-            </CardContent>
-          </Card>
+          </div>
         </div>
 
         {/* Right - Upcoming & Insights */}
@@ -152,17 +146,18 @@ export default function DashboardPage() {
           <UpcomingRenewals subscriptions={subscriptions} />
 
           {mostExpensive && (
-            <Card className="animate-slide-up" style={{ animationDelay: "500ms", animationFillMode: "both" }}>
-              <CardHeader className="flex flex-row items-center gap-2 pb-2">
-                <TrendingUp className="h-5 w-5 text-primary" />
-                <CardTitle className="text-base">Quick Insight</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground">
+            <div className="glass-card glow-amber p-6 animate-slide-up" style={{ animationDelay: "500ms", animationFillMode: "both" }}>
+              <div className="flex items-center gap-2 mb-3">
+                <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
+                  <TrendingUp className="h-4 w-4 text-white" />
+                </div>
+                <h3 className="font-semibold text-white text-sm">Quick Insight</h3>
+              </div>
+              <p className="text-sm text-slate-400">
                   Your most expensive subscription is{" "}
-                  <span className="font-semibold text-foreground">{mostExpensive.service_name}</span>{" "}
+                  <span className="font-semibold text-indigo-300">{mostExpensive.service_name}</span>{" "}
                   at{" "}
-                  <span className="font-semibold text-foreground">
+                  <span className="font-semibold text-white">
                     {formatCurrency(
                       mostExpensive.billing_cycle === "yearly"
                         ? mostExpensive.price / 12
@@ -171,8 +166,7 @@ export default function DashboardPage() {
                     /mo
                   </span>
                 </p>
-              </CardContent>
-            </Card>
+            </div>
           )}
         </div>
       </div>
