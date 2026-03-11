@@ -2,7 +2,13 @@
 
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { DollarSign, Calendar, CreditCard, AlertTriangle } from "lucide-react";
+import { Calendar, CreditCard, AlertTriangle } from "lucide-react";
+
+const INRIcon = ({ className }: { className?: string }) => (
+  <span className={className} aria-hidden>
+    ₹
+  </span>
+);
 import { formatCurrency } from "@/lib/utils";
 
 interface StatsCardsProps {
@@ -17,7 +23,7 @@ export function StatsCards({ monthlySpend, yearlySpend, activeCount, upcomingRen
     {
       title: "Monthly Spend",
       value: formatCurrency(monthlySpend),
-      icon: DollarSign,
+      icon: INRIcon,
       gradient: "from-indigo-500 to-indigo-600",
       bgGlow: "bg-indigo-500/10",
     },
