@@ -26,10 +26,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#050a18] text-slate-200`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#050a18] text-slate-200 flex flex-col min-h-screen`}>
         <AuthProvider>
           <Navbar />
-          <main className="min-h-[calc(100vh-4rem)]">{children}</main>
+          <main className="flex-1">{children}</main>
+          <footer className="border-t border-white/5 py-8 text-center">
+            <p className="text-sm text-slate-600">
+              &copy; {new Date().getFullYear()} SubSentry. Track Every Subscription. Control Every Rupee.
+            </p>
+          </footer>
         </AuthProvider>
       </body>
     </html>
