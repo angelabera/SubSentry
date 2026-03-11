@@ -38,7 +38,7 @@ const FEATURES = [
   {
     icon: TrendingDown,
     title: "Cut the Waste",
-    desc: "Spot duplicate and unused subs instantly. Save $$$ on autopilot.",
+    desc: "Spot duplicate and unused subs instantly. Save ₹₹₹ on autopilot.",
     gradient: "from-emerald-500 to-teal-500",
   },
 ];

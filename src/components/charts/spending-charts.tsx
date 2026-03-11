@@ -153,7 +153,7 @@ export function MonthlyCostBar({ subscriptions }: SpendingChartsProps) {
               axisLine={false}
             />
             <YAxis
-              tickFormatter={(v) => `$${v}`}
+              tickFormatter={(v) => `₹${v}`}
               tick={{ fontSize: 12 }}
               tickLine={false}
               axisLine={false}

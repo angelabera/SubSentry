@@ -24,7 +24,7 @@ export async function POST() {
       );
 
       const dayText = daysLeft === 0 ? "today" : daysLeft === 1 ? "tomorrow" : `in ${daysLeft} days`;
-      const message = `⚠ ${sub.service_name} renews ${dayText} — ${new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(sub.price)}`;
+      const message = `⚠ ${sub.service_name} renews ${dayText} — ${new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(sub.price)}`;
 
       const existing = await Notification.findOne({
         user_id: sub.user_id,
