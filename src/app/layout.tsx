@@ -17,6 +17,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "SubSentry – Smart Subscription Manager",
   description: "Track subscriptions, analyze spending, and never miss a renewal.",
+  icons: {
+    icon: "/currency-rupee-svgrepo-com.svg",
+  },
 };
 
 export default function RootLayout({
