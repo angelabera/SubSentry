@@ -229,12 +229,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ── Footer ── */}
-        <footer className="border-t border-white/5 py-8 text-center">
-          <p className="text-sm text-slate-600">
-            &copy; {new Date().getFullYear()} SubSentry. Built different.
-          </p>
-        </footer>
       </div>
     </div>
   );
