@@ -104,7 +104,9 @@ export default function ProfilePage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: fullName,
-          email,
+          firstName,
+          lastName,
+          middleName,
           phone,
           gender,
           occupation,
@@ -116,7 +118,8 @@ export default function ProfilePage() {
         setMessage("Profile updated successfully!");
         setTimeout(() => setMessage(""), 3000);
       } else {
-        setMessage("Failed to update profile");
+        const errorData = await res.json();
+        setMessage(errorData.error || "Failed to update profile");
       }
     } catch (error) {
       setMessage("Error updating profile");
