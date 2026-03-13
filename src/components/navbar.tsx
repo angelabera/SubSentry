@@ -171,10 +171,12 @@ export function Navbar() {
                   <p className="text-xs text-slate-500">{user.email}</p>
                 </div>
                 <DropdownMenuSeparator className="bg-white/10" />
-                <DropdownMenuItem className="text-slate-300 focus:bg-white/[0.06] focus:text-white">
-                  <User className="mr-2 h-4 w-4" />
-                  Profile
-                </DropdownMenuItem>
+                <Link href="/profile">
+                  <DropdownMenuItem className="text-slate-300 focus:bg-white/[0.06] focus:text-white cursor-pointer">
+                    <User className="mr-2 h-4 w-4" />
+                    Profile
+                  </DropdownMenuItem>
+                </Link>
                 <DropdownMenuSeparator className="bg-white/10" />
                 <DropdownMenuItem onClick={logout} className="text-red-400 focus:bg-red-500/10 focus:text-red-400">
                   <LogOut className="mr-2 h-4 w-4" />
