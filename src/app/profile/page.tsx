@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, MapPin, Loader } from "lucide-react";
 import Link from "next/link";
 
 export default function ProfilePage() {
@@ -21,6 +21,9 @@ export default function ProfilePage() {
   const [gender, setGender] = useState("");
   const [occupation, setOccupation] = useState("");
   const [location, setLocation] = useState("");
+  const [autoTrackLocation, setAutoTrackLocation] = useState(false);
+  const [gpsLoading, setGpsLoading] = useState(false);
+  const [gpsMessage, setGpsMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -40,6 +43,53 @@ export default function ProfilePage() {
       }
     }
   }, [user, authLoading, router]);
+
+  const handleGetLocation = async () => {
+    setGpsLoading(true);
+    setGpsMessage("");
+
+    if (!navigator.geolocation) {
+      setGpsMessage("Geolocation is not supported by your browser");
+      setGpsLoading(false);
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+        try {
+          // Use reverse geocoding API to get readable address
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+          );
+          const data = await response.json();
+          const address = data.address?.city || data.address?.county || data.address?.country || `${latitude}, ${longitude}`;
+          setLocation(address);
+          setGpsMessage("Location captured successfully!");
+          setTimeout(() => setGpsMessage(""), 3000);
+        } catch {
+          // Fallback to coordinates if reverse geocoding fails
+          setLocation(`${latitude.toFixed(4)}, ${longitude.toFixed(4)}`);
+          setGpsMessage("Location captured (coordinates only)");
+          setTimeout(() => setGpsMessage(""), 3000);
+        } finally {
+          setGpsLoading(false);
+        }
+      },
+      (error) => {
+        let errorMessage = "Unable to retrieve location";
+        if (error.code === error.PERMISSION_DENIED) {
+          errorMessage = "Location permission denied. Please enable it in your browser settings.";
+        } else if (error.code === error.POSITION_UNAVAILABLE) {
+          errorMessage = "Location information is unavailable.";
+        } else if (error.code === error.TIMEOUT) {
+          errorMessage = "Location request timed out.";
+        }
+        setGpsMessage(errorMessage);
+        setGpsLoading(false);
+      }
+    );
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -231,14 +281,71 @@ export default function ProfilePage() {
             </div>
 
             {/* Location */}
-            <div className="space-y-2">
-              <Label htmlFor="location" className="text-slate-300">
-                Location
-              </Label>
+            <div className="space-y-3">
+              <Label className="text-slate-300">Location</Label>
+              
+              {/* GPS Toggle */}
+              <div className="flex items-center gap-3 p-3 bg-white/[0.02] rounded-lg border border-white/5">
+                <input
+                  type="checkbox"
+                  id="autoTrackLocation"
+                  checked={autoTrackLocation}
+                  onChange={(e) => {
+                    setAutoTrackLocation(e.target.checked);
+                    if (e.target.checked) {
+                      handleGetLocation();
+                    }
+                  }}
+                  className="w-4 h-4 rounded cursor-pointer accent-indigo-500"
+                />
+                <label htmlFor="autoTrackLocation" className="text-sm text-slate-300 cursor-pointer flex-1">
+                  Track automatically via GPS
+                </label>
+                {autoTrackLocation && (
+                  <MapPin className="h-4 w-4 text-indigo-400" />
+                )}
+              </div>
+
+              {/* GPS Status Message */}
+              {gpsMessage && (
+                <div
+                  className={`p-2 rounded-lg text-xs ${
+                    gpsMessage.includes("successfully") || gpsMessage.includes("captured")
+                      ? "bg-emerald-500/10 text-emerald-400"
+                      : "bg-amber-500/10 text-amber-400"
+                  }`}
+                >
+                  {gpsMessage}
+                </div>
+              )}
+
+              {/* GPS Button */}
+              {autoTrackLocation && (
+                <button
+                  type="button"
+                  onClick={handleGetLocation}
+                  disabled={gpsLoading}
+                  className="w-full px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm rounded-md transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {gpsLoading ? (
+                    <>
+                      <Loader className="h-4 w-4 animate-spin" />
+                      Getting location...
+                    </>
+                  ) : (
+                    <>
+                      <MapPin className="h-4 w-4" />
+                      Get My Location
+                    </>
+                  )}
+                </button>
+              )}
+
+              {/* Location Input */}
               <Input
                 id="location"
                 type="text"
-                placeholder="San Francisco, CA"
+                placeholder={autoTrackLocation ? "Location will appear here" : "San Francisco, CA"}
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
                 className="bg-[#1f2937] border-white/10 text-white placeholder:text-slate-500"
