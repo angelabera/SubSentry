@@ -6,7 +6,8 @@ import Link from "next/link";
 import { useAuth } from "@/components/auth-provider";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Shield } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Shield, ArrowLeft } from "lucide-react";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -31,7 +32,14 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
+    <div className="min-h-screen flex items-center justify-center px-4 relative">
+      {/* Back to home button */}
+      <Link href="/">
+        <Button variant="ghost" size="icon" className="absolute top-6 left-6 text-slate-400 hover:text-white">
+          <ArrowLeft className="h-5 w-5" />
+        </Button>
+      </Link>
+      
       <div className="w-full max-w-md glass-card p-8 animate-scale-in">
         <div className="text-center mb-6">
           <div className="mx-auto mb-4 h-12 w-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
