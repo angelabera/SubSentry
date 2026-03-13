@@ -27,20 +27,39 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
+  // Redirect to login if not authenticated
   useEffect(() => {
     if (!authLoading && !user) {
       router.push("/login");
     } else if (user) {
       setEmail(user.email || "");
-      // Parse the name field if it exists
-      const nameParts = (user.name || "").split(" ");
-      if (nameParts.length > 0) {
-        setFirstName(nameParts[0] || "");
-        setLastName(nameParts[nameParts.length - 1] || "");
-        if (nameParts.length > 2) {
-          setMiddleName(nameParts.slice(1, -1).join(" ") || "");
-        }
+      // Parse the name field - handle various formats
+      const fullName = user.name || "";
+      const nameParts = fullName.trim().split(/\s+/);
+      
+      if (nameParts.length === 0 || nameParts[0] === "") {
+        // No name provided, use defaults
+        setFirstName("");
+        setLastName("");
+        setMiddleName("");
+      } else if (nameParts.length === 1) {
+        // Only one name part
+        setFirstName(nameParts[0]);
+        setLastName("");
+        setMiddleName("");
+      } else if (nameParts.length === 2) {
+        // Two name parts: First and Last
+        setFirstName(nameParts[0]);
+        setLastName(nameParts[1]);
+        setMiddleName("");
+      } else {
+        // Multiple parts: First, Middle(s), Last
+        setFirstName(nameParts[0]);
+        setLastName(nameParts[nameParts.length - 1]);
+        setMiddleName(nameParts.slice(1, -1).join(" "));
       }
+      
+      console.log("Profile initialized with user:", { fullName, nameParts });
     }
   }, [user, authLoading, router]);
 
@@ -93,11 +112,30 @@ export default function ProfilePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validate required fields
+    if (!firstName.trim() || !lastName.trim()) {
+      setMessage("Please fill in First Name and Last Name (required fields)");
+      console.warn("Form validation failed: Missing required fields");
+      return;
+    }
+    
     setLoading(true);
     setMessage("");
 
     try {
       const fullName = [firstName, middleName, lastName].filter(Boolean).join(" ");
+      
+      console.log("Submitting profile update:", {
+        fullName,
+        firstName,
+        lastName,
+        middleName,
+        phone,
+        gender,
+        occupation,
+        location,
+      });
       
       const res = await fetch("/api/auth/me", {
         method: "PUT",
@@ -114,16 +152,22 @@ export default function ProfilePage() {
         }),
       });
 
+      console.log("API response status:", res.status);
+
       if (res.ok) {
-        setMessage("Profile updated successfully!");
-        setTimeout(() => setMessage(""), 3000);
+        const data = await res.json();
+        console.log("Profile updated successfully:", data);
+        setMessage("✓ Profile updated successfully!");
+        setTimeout(() => setMessage(""), 5000);
+        // Stay on profile page - do not redirect
       } else {
         const errorData = await res.json();
+        console.error("Update failed:", errorData);
         setMessage(errorData.error || "Failed to update profile");
       }
     } catch (error) {
-      setMessage("Error updating profile");
-      console.error(error);
+      setMessage("Error updating profile: " + (error instanceof Error ? error.message : "Unknown error"));
+      console.error("Error updating profile:", error);
     } finally {
       setLoading(false);
     }
@@ -172,7 +216,6 @@ export default function ProfilePage() {
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
                   className="bg-[#1f2937] border-white/10 text-white placeholder:text-slate-500"
-                  required
                 />
               </div>
               <div className="space-y-2">
@@ -186,7 +229,6 @@ export default function ProfilePage() {
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
                   className="bg-[#1f2937] border-white/10 text-white placeholder:text-slate-500"
-                  required
                 />
               </div>
             </div>
@@ -242,7 +284,6 @@ export default function ProfilePage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="bg-[#1f2937] border-white/10 text-white placeholder:text-slate-500"
-                required
                 disabled
               />
               <p className="text-xs text-slate-500">Email cannot be changed</p>
